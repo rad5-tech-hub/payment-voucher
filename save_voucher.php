@@ -38,21 +38,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'prepared')");
   $stmt->execute([$voucherId, $payee, $address, $cheque_no, $payment_type, $amount_words, $items_json, $total, $prepared_by_name, $prepared_by_signature, $preparer_email, $approver_email, $receiver_email]);
 
-  $messageApprover = `Hello,
+  $messageApprover = "Hello,<br><br>
 
-  A Payment Voucher has been prepared and assigned to you as an Approver.
+  A Payment Voucher has been prepared and assigned to you as an Approver.<br><br>
 
-  <a href="$domain . 'sign.php?voucher_id=' . $voucher_id . '&role=approve'">Sign to Approve</a> `;
-  $messageReceiver = `Hello,
+  <a href='". $domain . "sign.php?voucher_id=" . $voucher_id . "&role=approve'>Sign to Approve</a> ";
+  $messageReceiver = "Hello,<br><br>
 
-  A Payment Voucher has been prepared and assigned to you as a Receiver.
+  A Payment Voucher has been prepared and assigned to you as a Receiver.<br><br>
 
-  <a href="$domain . 'sign.php?voucher_id=' . $voucher_id . '&role=receive'">Sign to Receive</a> `;
+  <a href='" . $domain . "sign.php?voucher_id=" . $voucher_id . "&role=receive'>Sign to Receive</a>";
 
   // Preferably use SMTP to send mail
 
-  mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover);
-  mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver);
+  $headers = "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
+  mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover, $headers);
+  mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver, $headers);
 
   echo json_encode(['success' => true, 'id' => $voucherId]);
 } else {

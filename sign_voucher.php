@@ -37,17 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // check if all have signed
     if ($voucher['prepared_by_signature'] != NULL and $voucher['approved_by_signature'] != NULL and $voucher['received_by_signature'] != NULL) {
-        $message = `Hello,
+        $message = "Hello,<br><br>
 
-        All Signatories have completed the signing of the Payment Voucher - ` . $voucher['voucher_id'] . `.
+        All Signatories have completed the signing of the Payment Voucher - " . $voucher['voucher_id'] . ".
 
-        <a href="$domain . 'view.php?voucher_id=' . $voucher_id . ">View and Print Voucher</a> `;
+        <a href='" . $domain . "view.php?voucher_id=" . $voucher_id . ">View and Print Voucher</a>";
 
         // Preferably use SMTP to send mail
-
-        mail($voucher['prepared_by_signature'], "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
-        mail($voucher['approved_by_signature'], "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
-        mail($voucher['received_by_signature'], "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
+        $emails = $voucher['prepared_by_signature'] . ", " . $voucher['approved_by_signature'] . ", " . $voucher['received_by_signature'];
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
+        mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
     }
 
     echo json_encode(['success' => true, 'id' => $voucherId]);
