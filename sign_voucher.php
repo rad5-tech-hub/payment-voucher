@@ -39,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($voucher['prepared_by_signature'] and $voucher['approved_by_signature'] and $voucher['received_by_signature']) {
         $message = "Hello,<br><br>
 
-        All Signatories have completed the signing of the Payment Voucher - " . $voucher['voucher_id'] . ".
+        All Signatories have completed the signing of the Payment Voucher - " . $voucher['voucher_id'] . ".<br><br>
 
-        <a href='" . $domain . "view.php?voucher_id=" . $voucher_id . ">View and Print Voucher</a>";
+        <a href='" . $domain . "view.php?voucher_id=" . $voucherId . "'>View and Print Voucher</a>";
 
         // Preferably use SMTP to send mail
         $emails = $voucher['preparer_email'] . ", " . $voucher['approver_email'] . ", " . $voucher['receiver_email'];
