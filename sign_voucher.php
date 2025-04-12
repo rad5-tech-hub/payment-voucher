@@ -44,12 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href='" . $domain . "view.php?voucher_id=" . $voucher_id . ">View and Print Voucher</a>";
 
         // Preferably use SMTP to send mail
-        $emails = $voucher['prepared_by_signature'] . ", " . $voucher['approved_by_signature'] . ", " . $voucher['received_by_signature'];
+        $emails = $voucher['preparer_email'] . ", " . $voucher['approver_email'] . ", " . $voucher['receiver_email'];
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
-        // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>" . "\r\n" .
-        // "CC: ". $messageReceiver;
         mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
     }
 
