@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $voucher = $stmt->fetch();
 
     // check if all have signed
-    if ($voucher['prepared_by_signature'] != NULL and $voucher['approved_by_signature'] != NULL and $voucher['received_by_signature'] != NULL) {
+    if ($voucher['prepared_by_signature'] and $voucher['approved_by_signature'] and $voucher['received_by_signature']) {
         $message = "Hello,<br><br>
 
         All Signatories have completed the signing of the Payment Voucher - " . $voucher['voucher_id'] . ".
@@ -48,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
+        // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>" . "\r\n" .
+        // "CC: ". $messageReceiver;
         mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
     }
 

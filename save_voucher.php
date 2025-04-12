@@ -42,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   A Payment Voucher has been prepared and assigned to you as an Approver.<br><br>
 
-  <a href='". $domain . "sign.php?voucher_id=" . $voucher_id . "&role=approve'>Sign to Approve</a> ";
+  <a href='". $domain . "sign.php?voucher_id=" . $voucherId . "&role=approve'>Sign to Approve</a> ";
   $messageReceiver = "Hello,<br><br>
 
   A Payment Voucher has been prepared and assigned to you as a Receiver.<br><br>
 
-  <a href='" . $domain . "sign.php?voucher_id=" . $voucher_id . "&role=receive'>Sign to Receive</a>";
+  <a href='" . $domain . "sign.php?voucher_id=" . $voucherId . "&role=receive'>Sign to Receive</a>";
 
   // Preferably use SMTP to send mail
 
