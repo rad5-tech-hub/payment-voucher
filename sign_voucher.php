@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Preferably use SMTP to send mail
         $emails = $voucher['preparer_email'] . "," . $voucher['approver_email'] . "," . $voucher['receiver_email'];
-        $resp = sendSMTPMail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
+        $resp = sendSMTPMail($host, $username, $password, $emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
         if (gettype($resp) != "boolean") {
             echo json_encode(['error' => $resp]);
             exit();

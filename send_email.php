@@ -7,7 +7,7 @@ require 'vendor/autoload.php'; // If installed via Composer
 // require 'path/to/PHPMailer/src/SMTP.php';
 // require 'path/to/PHPMailer/src/Exception.php';
 
-function sendSMTPMail($to, $subject, $bodyHtml, $bodyPlain = '') {
+function sendSMTPMail($host, $username, $password, $to, $subject, $bodyHtml, $bodyPlain = '') {
     $mail = new PHPMailer(true);
 
     try {
