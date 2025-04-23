@@ -188,7 +188,7 @@
         <input type="email" name="receiver_email" required>
     </div>
 
-    <button type="submit">Save and Send for Approval</button>
+    <button type="submit" id="btnSend">Save and Send for Approval</button>
   </form>
 </div>
 
@@ -239,6 +239,8 @@
     const formData = new FormData(form);
     formData.append('voucherId', voucherId)
 
+    document.getElementById('btnSend').disabled = true;
+    document.getElementById('btnSend').textContent = "Please Wait...";
     fetch('save_voucher.php', {
       method: 'POST',
       body: formData

@@ -184,6 +184,11 @@ $items = json_decode($voucher['items'], true);
       margin-top: 15px;
     }
 
+    .btn-clear {
+      background-color: #aaa;
+      margin-left: 10px;
+    }
+
     @media print {
         .print-btn, .action-btn {
             display: none !important;
@@ -310,7 +315,7 @@ $items = json_decode($voucher['items'], true);
         </div>
       </div>
 
-      <button type="submit">Save<?=$_GET['role'] == 'approve' ? " and Send for Receival" : ""?></button>
+      <button id="btnSend" type="submit">Save<?=$_GET['role'] == 'approve' ? " and Send for Receival" : ""?></button>
     </form>
     <?php
      }
@@ -346,6 +351,8 @@ $items = json_decode($voucher['items'], true);
 
     const formData = new FormData(form);
 
+    document.getElementById('btnSend').disabled = true;
+    document.getElementById('btnSend').textContent = "Please Wait...";
     fetch('sign_voucher.php', {
       method: 'POST',
       body: formData

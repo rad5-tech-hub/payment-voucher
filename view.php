@@ -235,6 +235,10 @@ $items = json_decode($voucher['items'], true);
             <td>₦<?= number_format($item['amt'], 2) ?></td>
           </tr>
         <?php endforeach; ?>
+          <tr>
+            <th colspan="2" style="text-align: center;">TOTAL</th>
+            <th>₦<?= number_format($voucher['total_amount'], 2) ?></th>
+          </tr>
       </tbody>
     </table>
 
