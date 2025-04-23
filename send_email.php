@@ -17,7 +17,7 @@ function sendSMTPMail($to, $subject, $bodyHtml, $bodyPlain = '') {
         $mail->SMTPAuth   = true;
         $mail->Username   = $username; // your SMTP username
         $mail->Password   = $password;  // your SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // or PHPMailer::ENCRYPTION_SMTPS
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // or PHPMailer::ENCRYPTION_SMTPS
         $mail->Port       = 465; // usually 587 for TLS or 465 for SSL
 
         // Email settings
