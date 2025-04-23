@@ -1,5 +1,6 @@
 <?php
 require 'db.php'; // include your database connection
+require 'send_email.php';
 
 function sanitize($input) {
   return htmlspecialchars(trim($input));
@@ -44,11 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href='" . $domain . "view.php?voucher_id=" . $voucherId . "'>View and Print Voucher</a>";
 
         // Preferably use SMTP to send mail
-        $emails = $voucher['preparer_email'] . ", " . $voucher['approver_email'] . ", " . $voucher['receiver_email'];
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
-        mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
+        $emails = $voucher['preparer_email'] . "," . $voucher['approver_email'] . "," . $voucher['receiver_email'];
+        sendSMTPMail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
+        // $headers = "MIME-Version: 1.0" . "\r\n";
+        // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
+        // mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
     }
 
     echo json_encode(['success' => true, 'id' => $voucherId]);

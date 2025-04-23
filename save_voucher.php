@@ -1,6 +1,7 @@
 <?php
 // save_voucher.php
 require 'db.php'; // include your database connection
+require 'send_email.php';
 
 function sanitize($input) {
   return htmlspecialchars(trim($input));
@@ -51,11 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Preferably use SMTP to send mail
 
-  $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
-  mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover, $headers);
-  mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver, $headers);
+  sendSMTPMail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover);
+  sendSMTPMail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver);
+
+  // $headers = "MIME-Version: 1.0" . "\r\n";
+  // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
+  // mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover, $headers);
+  // mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver, $headers);
 
   echo json_encode(['success' => true, 'id' => $voucherId]);
 } else {
