@@ -50,16 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <a href='" . $domain . "sign.php?voucher_id=" . $voucherId . "&role=receive'>Sign to Receive</a>";
 
-  // Preferably use SMTP to send mail
-
+  // Send Email Alert using SMTP
   $resp = sendSMTPMail($host, $username, $password, $approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover);
   $resp2 = sendSMTPMail($host, $username, $password, $receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver);
 
-  // $headers = "MIME-Version: 1.0" . "\r\n";
-  // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
-  // mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover, $headers);
-  // mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver, $headers);
 
   if (gettype($resp) == "boolean" and gettype($resp2) == "boolean") {
     echo json_encode(['success' => true, 'id' => $voucherId]);

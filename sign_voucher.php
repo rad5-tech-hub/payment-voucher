@@ -44,17 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <a href='" . $domain . "view.php?voucher_id=" . $voucherId . "'>View and Print Voucher</a>";
 
-        // Preferably use SMTP to send mail
+        // Send Email Alert using SMTP
         $emails = $voucher['preparer_email'] . "," . $voucher['approver_email'] . "," . $voucher['receiver_email'];
         $resp = sendSMTPMail($host, $username, $password, $emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
         if (gettype($resp) != "boolean") {
             echo json_encode(['error' => $resp]);
             exit();
         }
-        // $headers = "MIME-Version: 1.0" . "\r\n";
-        // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
-        // mail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message, $headers);
     }
 
     echo json_encode(['success' => true, 'id' => $voucherId]);
