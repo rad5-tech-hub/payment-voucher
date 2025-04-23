@@ -52,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Preferably use SMTP to send mail
 
-  sendSMTPMail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover);
-  sendSMTPMail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver);
+  $resp = sendSMTPMail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover);
+  $resp2 = sendSMTPMail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver);
 
   // $headers = "MIME-Version: 1.0" . "\r\n";
   // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -61,7 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // mail($approver_email, "Approve Payment Voucher: " . $voucherId, $messageApprover, $headers);
   // mail($receiver_email, "Receive Payment Voucher: " . $voucherId, $messageReceiver, $headers);
 
-  echo json_encode(['success' => true, 'id' => $voucherId]);
+  if (gettype($resp) == "boolean" and gettype($resp2) == "boolean") {
+    echo json_encode(['success' => true, 'id' => $voucherId]);
+  } else {
+    echo json_encode(['error' => $resp . "|" . $resp2]);
+  }
 } else {
   echo json_encode(['error' => 'Invalid request']);
 }

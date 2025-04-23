@@ -46,7 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Preferably use SMTP to send mail
         $emails = $voucher['preparer_email'] . "," . $voucher['approver_email'] . "," . $voucher['receiver_email'];
-        sendSMTPMail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
+        $resp = sendSMTPMail($emails, "Payment Voucher: " . $voucher['voucher_id'] . " Completed", $message);
+        if (gettype($resp) != "boolean") {
+            echo json_encode(['error' => $resp]);
+            exit();
+        }
         // $headers = "MIME-Version: 1.0" . "\r\n";
         // $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         // $headers .= "From: RAD5 Tech Hub <no-reply@rad5.com.ng>";
