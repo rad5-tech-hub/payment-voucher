@@ -9,12 +9,12 @@ if (!$voucher_id) {
 }
 
 // Query the voucher
-$stmt = $pdo->prepare("SELECT * FROM vouchers WHERE voucher_id = :voucher_id");
+$stmt = $pdo->prepare("SELECT * FROM vouchers WHERE voucher_id = :voucher_id AND deleted_at IS NULL");
 $stmt->execute(['voucher_id' => $voucher_id]);
 $voucher = $stmt->fetch();
 
 if (!$voucher) {
-  die("Voucher not found.");
+  die("Voucher not found or cancelled");
 }
 
 // Decode items

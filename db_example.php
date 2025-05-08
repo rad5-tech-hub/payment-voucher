@@ -44,6 +44,7 @@ CREATE TABLE vouchers (
       approver_email VARCHAR(255), 
       receiver_email VARCHAR(255), 
       status ENUM('prepared','approved','received') DEFAULT 'prepared', 
+      deleted_at TIMESTAMPP NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 */

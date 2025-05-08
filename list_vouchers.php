@@ -2,13 +2,39 @@
 // Database connection
 require('db.php');
 
+// Handle deletion
+if (isset($_GET['delete']) && !empty($_GET['delete'])) {
+  $deleteId = $_GET['delete'];
+  $delStmt = $pdo->prepare("UPDATE vouchers SET deleted_at = NOW() WHERE voucher_id = :id");
+  $delStmt->execute([':id' => $deleteId]);
+
+  require 'send_email.php';
+
+  // Query the voucher
+  $stmt = $pdo->prepare("SELECT * FROM vouchers WHERE voucher_id = :voucher_id");
+  $stmt->execute(['voucher_id' => $deleteId]);
+  $voucher = $stmt->fetch();
+
+  $message = "Hello,<br><br>
+
+  Payment Voucher - " . $voucher['voucher_id'] . " has been cancelled, no further action is required";
+
+  // Send Email Alert using SMTP
+  $emails = $voucher['preparer_email'] . "," . $voucher['approver_email'] . "," . $voucher['receiver_email'];
+  $resp = sendSMTPMail($host, $username, $password, $emails, "Payment Voucher: " . $voucher['voucher_id'] . " Cancelled", $message);
+  if (gettype($resp) != "boolean") {
+      echo json_encode(['error' => $resp]);
+      exit();
+  }
+  // header("Location: list_vouchers.php?msg=deleted");
+}
 
 // Fetch vouchers grouped by month
 $stmt = $pdo->prepare("
 SELECT 
     id, voucher_id, payee, address, payment_type, total_amount, prepared_by_name, approved_by_name, received_by_name, created_at,
     DATE_FORMAT(created_at, '%M %Y') AS month_year
-FROM vouchers
+FROM vouchers WHERE deleted_at IS NULL
 ORDER BY created_at DESC
 ");
 $stmt->execute();
@@ -63,6 +89,14 @@ foreach ($results as $row) {
       text-decoration: underline;
     }
   </style>
+
+  <script>
+      function confirmDelete(voucherId) {
+        if (confirm("Are you sure you want to cancel this voucher?")) {
+          window.location.href = "list_vouchers.php?delete=" + voucherId;
+        }
+      }
+  </script>
 </head>
 <body>
 
@@ -99,7 +133,10 @@ foreach ($results as $row) {
             <td><?= htmlspecialchars($voucher['prepared_by_name']) ?></td>
             <td><?= htmlspecialchars($voucher['approved_by_name']) ?></td>
             <td><?= htmlspecialchars($voucher['received_by_name']) ?></td>
-            <td><a href="view.php?voucher_id=<?= urlencode($voucher['voucher_id']) ?>" target="_blank">View</a></td>
+            <td>
+              <a href="view.php?voucher_id=<?= urlencode($voucher['voucher_id']) ?>" target="_blank">View</a> |
+              <a href="javascript:void(0);" class="delete-btn" onclick="confirmDelete('<?= $voucher['voucher_id'] ?>')">Cancel</a>
+            </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
